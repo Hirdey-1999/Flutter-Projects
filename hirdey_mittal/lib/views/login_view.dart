@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'register_view.dart';
 import '../firebase_options.dart';
 
 class LoginView extends StatefulWidget {
@@ -30,54 +30,46 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: const Text('Login'))),
-      body: FutureBuilder(
-         future: Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform,
-            ),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-             return Column(
-            children: [
+      appBar: AppBar(title: Text('Login'),),
+      body: Column(
+              children: [
+                TextField(
+                controller: _email,
+                enableSuggestions: false,
+                autocorrect: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(hintText: "Enter Your Email"),
+              ),
               TextField(
-              controller: _email,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(hintText: "Enter Your Email"),
-            ),
-            TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: InputDecoration(hintText: "Enter Your Password",),
-            ),
-            TextButton(onPressed: () async {
-            
-              final email = _email.text;
-              final password  = _password.text;
-              try {final usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-              print(usercredential);
-              }on FirebaseAuthException catch(e) {
-                if (e.code == 'user-not-found') {
-                  print('User Not Found');
-                }
-                else {
-                  print('Something Went Wrong');
-                  print(e.code);
-                }
-              }
+                controller: _password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: InputDecoration(hintText: "Enter Your Password",),
+              ),
+              TextButton(onPressed: () async {
               
-            },child: const Text('Login'),),
-          ],
-        );
-        default: 
-        return Text("Loading....");}
-          
-        }
-      )
+                final email = _email.text;
+                final password  = _password.text;
+                try {final usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                print(usercredential);
+                }on FirebaseAuthException catch(e) {
+                  if (e.code == 'user-not-found') {
+                    print('User Not Found');
+                  }
+                  else {
+                    print('Something Went Wrong');
+                    print(e.code);
+                  }
+                }
+                
+              },child: const Text('Login'),
+              ),
+              TextButton(onPressed: (){
+                Navigator.of(context).pushNamedAndRemoveUntil('/register/', (route) => false);
+              }, child: const Text('Not Registered? SignUp Now'))
+            ],
+          ),
     );
   }
 }
