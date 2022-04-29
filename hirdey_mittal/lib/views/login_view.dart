@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/constants/routes.dart';
+import '../utilities/show_error_dialog.dart';
 import 'register_view.dart';
 import '../firebase_options.dart';
 import 'dart:developer' as devtools show log; 
@@ -16,6 +17,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   bool _isObscure = true;
+
   @override
   void initState() {
     _email = TextEditingController();
@@ -34,12 +36,12 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: AppBar(title: Text('Login'),),
       body: Padding(
-        padding: const EdgeInsets.only(top: 194.0),
+        padding: const EdgeInsets.only(top: 170.0),
         child: Column(
                 children: [
                   Title(color: Colors.black, child: Text('Login Page', style: TextStyle(fontWeight: FontWeight.bold, ),textScaleFactor: 1.5,)),
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(top: 10.0,bottom: 10.0),
                     child: TextField(
                     controller: _email,
                     enableSuggestions: false,
@@ -77,22 +79,31 @@ class _LoginViewState extends State<LoginView> {
                   // devtools.log(usercredential.toString());
                   }on FirebaseAuthException catch(e) {
                     if (e.code == 'user-not-found') {
+                      await showErrorDialog(context, 'User Not Found');
                       devtools.log('User Not Found');
+                    }
+                    else if(e.code == 'wrong-password'){
+                      await showErrorDialog(context, 'Entered Wrong Password');
+                      devtools.log('Wrong Password');
                     }
                     else {
                       devtools.log('Something Went Wrong');
+                      await showErrorDialog(context, 'Error: ${e.code.toString()}');
                       devtools.log(e.code.toString());
                     }
+                  }catch (e) {
+                    await showErrorDialog(context, e.toString());
                   }
                   
                 },child: const Text('Login'),
                 ),
                 TextButton(onPressed: (){
                   Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
-                }, child: const Text('Not Registered? SignUp Now'))
+                }, child: const Text('Not Registered? SignUp Now',))
               ],
             ),
       ),
     );
   }
 }
+
