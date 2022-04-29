@@ -15,6 +15,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  bool _isObscure = true;
   @override
   void initState() {
     _email = TextEditingController();
@@ -27,51 +28,71 @@ class _LoginViewState extends State<LoginView> {
     _password.dispose();
     super.dispose();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Login'),),
-      body: Column(
-              children: [
+      body: Padding(
+        padding: const EdgeInsets.only(top: 194.0),
+        child: Column(
+                children: [
+                  Title(color: Colors.black, child: Text('Login Page', style: TextStyle(fontWeight: FontWeight.bold, ),textScaleFactor: 1.5,)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextField(
+                    controller: _email,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(border: OutlineInputBorder(),labelText: 'Email'),
+                ),
+                  ),
                 TextField(
-                controller: _email,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(hintText: "Enter Your Email"),
-              ),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: InputDecoration(hintText: "Enter Your Password",),
-              ),
-              TextButton(onPressed: () async {
-              
-                final email = _email.text;
-                final password  = _password.text;
-                try {final usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-                Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
-                // devtools.log(usercredential.toString());
-                }on FirebaseAuthException catch(e) {
-                  if (e.code == 'user-not-found') {
-                    devtools.log('User Not Found');
-                  }
-                  else {
-                    devtools.log('Something Went Wrong');
-                    devtools.log(e.code.toString());
-                  }
-                }
+                  controller: _password,
+                  obscureText: _isObscure,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: InputDecoration(border: OutlineInputBorder(),labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isObscure ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
+                  )
+                  ),
+                  
+                ),
+                TextButton(onPressed: () async {
                 
-              },child: const Text('Login'),
-              ),
-              TextButton(onPressed: (){
-                Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
-              }, child: const Text('Not Registered? SignUp Now'))
-            ],
-          ),
+                  final email = _email.text;
+                  final password  = _password.text;
+                  try {final usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                  Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+                  // devtools.log(usercredential.toString());
+                  }on FirebaseAuthException catch(e) {
+                    if (e.code == 'user-not-found') {
+                      devtools.log('User Not Found');
+                    }
+                    else {
+                      devtools.log('Something Went Wrong');
+                      devtools.log(e.code.toString());
+                    }
+                  }
+                  
+                },child: const Text('Login'),
+                ),
+                TextButton(onPressed: (){
+                  Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
+                }, child: const Text('Not Registered? SignUp Now'))
+              ],
+            ),
+      ),
     );
   }
 }
