@@ -1,4 +1,6 @@
 import 'dart:developer' as devtools show log;
+import 'package:hirdey_mittal/constants/routes.dart';
+
 import 'views/verify_email_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,9 +20,9 @@ void main() {
       ),
       home: const HomePage(),
       routes: {
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterView(),
-        '/notes/': (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        notesRoute: (context) => const NotesView(),
         '/verifyemail/':(context) => const verifyEmailView(),
       },
     ),
@@ -43,7 +45,7 @@ class HomePage extends StatelessWidget {
             if (user!= null){
               if(user.emailVerified) {
                 devtools.log('Hello World');
-                Navigator.of(context).pushNamedAndRemoveUntil('/notes/', (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
                 return const NotesView();
               }
               else{
@@ -84,7 +86,7 @@ class _NotesViewState extends State<NotesView> {
                  final shouldLogout = await showLogOutDialog(context);
                  if (shouldLogout){
                   await FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pushNamedAndRemoveUntil('/login/', (_) => false);
+                  Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (_) => false);
                  }
              }
            }, 
