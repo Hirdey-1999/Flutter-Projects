@@ -1,12 +1,19 @@
-import 'dart:html';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:hirdey_mittal/service/auth/auth_user.dart';
 import 'package:hirdey_mittal/service/auth/auth_exceptions.dart';
 import 'package:hirdey_mittal/service/auth/auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' 
  show FirebaseAuth,FirebaseAuthException;
 
+import '../../firebase_options.dart';
+
  class FirebaseAuthProvider implements AuthProvider{
+   Future<void> initialise() async {
+     await Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+            );
+   }
+
   @override
   Future<AuthUser> createUser ({required String email, required String password,}) async {
     try {
@@ -100,4 +107,6 @@ import 'package:firebase_auth/firebase_auth.dart'
       throw UserNotLoggedInAuthExcepton();
     }
   }
+
+  
 }
