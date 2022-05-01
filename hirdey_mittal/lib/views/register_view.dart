@@ -79,21 +79,21 @@ class _RegisterViewState extends State<RegisterView> {
                     // Navigator.of(context).pushNamed(verifyEmailRoute);
                     }
                     on FirebaseAuthException catch(e){
-                      if(e.code == 'weak-password'){
-                        devtools.log('Weak Password');
-                        showErrorDialog(context, 'Weak Password');
-                      }
-                      else if(e.code=='email-already-in-use'){
-                        devtools.log('Email Already In Use');
-                        showErrorDialog(context, 'Email Already In Use');
-                      }
-                      else if(e.code == 'invalid-email'){
-                        devtools.log('Invalid Email');
-                        showErrorDialog(context, 'Invalid Email');
-                      }
-                      else {
-                        showErrorDialog(context, 'Error: ${e.code}');
-                      }
+                      // if(e.code == 'weak-password'){
+                      //   devtools.log('Weak Password');
+                      //   showErrorDialog(context, 'Weak Password');
+                      // }
+                      // else if(e.code=='email-already-in-use'){
+                      //   devtools.log('Email Already In Use');
+                      //   showErrorDialog(context, 'Email Already In Use');
+                      // }
+                      // else if(e.code == 'invalid-email'){
+                      //   devtools.log('Invalid Email');
+                      //   showErrorDialog(context, 'Invalid Email');
+                      // }
+                      // else {
+                      //   showErrorDialog(context, 'Error: ${e.code}');
+                      // }
                     }
                     catch (e) {
                       showErrorDialog(context, e.toString());
@@ -104,7 +104,12 @@ class _RegisterViewState extends State<RegisterView> {
                   TextButton(onPressed: (){
                   Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
                 }, child: const Text('Already Registered? Login Now')),
-                  
+                  Image.asset(
+                    'images/register.jpg',
+                    width: 300,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
                 ],
               ),
         ),

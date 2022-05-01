@@ -36,9 +36,10 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: AppBar(title: Text('Login'),),
       body: Padding(
-        padding: const EdgeInsets.only(top: 170.0),
+        padding: const EdgeInsets.all(0.0),
         child: Column(
                 children: [
+                  
                   Title(color: Colors.black, child: Text('Login Page', style: TextStyle(fontWeight: FontWeight.bold, ),textScaleFactor: 1.5,)),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0,bottom: 10.0),
@@ -75,7 +76,17 @@ class _LoginViewState extends State<LoginView> {
                   final email = _email.text;
                   final password  = _password.text;
                   try {final usercredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-                  Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+                  final user = FirebaseAuth.instance.currentUser;
+                  if(user?.emailVerified ?? false){
+                    // User Is Verified!!
+                  Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);  
+                  }
+                  else{
+                    // User Is Not Verified
+                  await showAlertDialog(context, "Check Your Email Or Register Again");
+                  Navigator.of(context).pushNamedAndRemoveUntil(registerRoute ,(route) => false);
+                  }
+                  
                   // devtools.log(usercredential.toString());
                   }on FirebaseAuthException catch(e) {
                     if (e.code == 'user-not-found') {
@@ -99,11 +110,16 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 TextButton(onPressed: (){
                   Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
-                }, child: const Text('Not Registered? SignUp Now',))
+                }, child: const Text('Not Registered? SignUp Now',)),
+                Image.asset(
+                    'images/login.jpg',
+                    width: 300,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
               ],
             ),
       ),
     );
   }
 }
-

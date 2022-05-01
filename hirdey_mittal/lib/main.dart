@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
                 return const NotesView();
               }
               else{
-                return const LoginView();
+                return const RegisterView();
               }
             } else {
               return const LoginView();
