@@ -1,7 +1,6 @@
 import 'dart:developer' as devtools show log;
 import 'package:hirdey_mittal/constants/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
 import 'package:hirdey_mittal/views/notes_view.dart';
 import 'firebase_options.dart';
@@ -32,7 +31,7 @@ class HomePage extends StatelessWidget {
  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: AuthService.firebase().initialise(),
+      future: AuthService.firebase().initialise(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:

@@ -39,7 +39,6 @@ class _LoginViewState extends State<LoginView> {
         padding: const EdgeInsets.all(0.0),
         child: Column(
                 children: [
-                  
                   Title(color: Colors.black, child: Text('Login Page', style: TextStyle(fontWeight: FontWeight.bold, ),textScaleFactor: 1.5,)),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0,bottom: 10.0),

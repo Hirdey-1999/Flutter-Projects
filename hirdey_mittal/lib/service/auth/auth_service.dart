@@ -7,7 +7,9 @@ import 'package:hirdey_mittal/service/auth/firebase_Auth_Provider.dart';
 class AuthService implements AuthProvider{
   final AuthProvider provider;
   const AuthService(this.provider);
+
   factory AuthService.firebase()=> AuthService(FirebaseAuthProvider(),);
+  
   @override
   Future<AuthUser> createUser({required String email, required String password}) => provider.createUser(email: email, password: password);
 

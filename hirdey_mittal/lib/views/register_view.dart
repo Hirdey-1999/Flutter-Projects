@@ -101,8 +101,8 @@ class _RegisterViewState extends State<RegisterView> {
                 }, child: const Text('Already Registered? Login Now')),
                   Image.asset(
                     'images/register.jpg',
-                    width: 300,
-                    height: 300,
+                    width: 200,
+                    height: 200,
                     fit: BoxFit.cover,
                   ),
                 ],
