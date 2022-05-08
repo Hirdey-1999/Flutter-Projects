@@ -6,6 +6,7 @@ import 'package:hirdey_mittal/views/notes_view.dart';
 import 'firebase_options.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
