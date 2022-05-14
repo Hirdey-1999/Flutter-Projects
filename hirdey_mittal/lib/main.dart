@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
             if (user!= null){
               if(user.isEmailVerified) {
                 devtools.log('Hello World');
-                Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (Route<dynamic> route) => false);
                 return const NotesView();
               }
               else{
