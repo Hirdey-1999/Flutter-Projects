@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
 import 'package:hirdey_mittal/service/crud/notes_service.dart';
 
-import '../constants/routes.dart';
-import '../enums/menu_action.dart';
+import '../../constants/routes.dart';
+import '../../enums/menu_action.dart';
 class NotesView extends StatefulWidget {
   const NotesView({ Key? key }) : super(key: key);
 
@@ -16,7 +16,7 @@ class _NotesViewState extends State<NotesView> {
 
   @override
   void initState() {
-    
+
     _notesService = noteService();
     super.initState();
   }
@@ -30,28 +30,17 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: const Text('Main UI', textScaleFactor: 1.8,),),
+        title: Center(child: const Text('Notes', textScaleFactor: 1.8,),),
         backgroundColor: Colors.blue,
-
         actions: [
-           PopupMenuButton<MenuAction>(onSelected: (value) async {
-             switch (value){
-               
-               case MenuAction.logout:
-                 final shouldLogout = await showLogOutDialog(context);
-                 if (shouldLogout){
-                  await AuthService.firebase().logOut();
-                  Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (_) => false);
-                 }
-             }
-           }, 
-           itemBuilder: (context) {
-             return const [
-               PopupMenuItem<MenuAction>(
-                 value: MenuAction.logout , child: Text('Log Out'))];
-           }
-           ,)
-           ,],
+          IconButton(onPressed: () {Navigator.of(context).pushNamed(newNoteRoute);} , icon: const Icon(Icons.add)),
+          //LogOut
+          IconButton(onPressed: () async{ final shouldLogout = await showLogOutDialog(context);
+            if (shouldLogout){
+              await AuthService.firebase().logOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (_) => false);
+            } }, icon: Icon( Icons.logout,),),
+        ],
       ),
       body: FutureBuilder(
         future: _notesService.getOrCreateUser(email: userEmail),
