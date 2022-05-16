@@ -50,6 +50,7 @@ class _LoginViewState extends State<LoginView> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(border: OutlineInputBorder(),labelText: 'Email'),
                 ),
+
                   ),
                 TextField(
                   controller: _password,

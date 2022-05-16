@@ -16,7 +16,7 @@ class _NotesViewState extends State<NotesView> {
 
   @override
   void initState() {
-
+    
     _notesService = noteService();
     super.initState();
   }
@@ -30,7 +30,7 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: const Text('Notes', textScaleFactor: 1.8,),),
+        title: const Text('Notes', textScaleFactor: 1.8,),
         backgroundColor: Colors.blue,
         actions: [
           IconButton(onPressed: () {Navigator.of(context).pushNamed(newNoteRoute);} , icon: const Icon(Icons.add)),
@@ -49,8 +49,9 @@ class _NotesViewState extends State<NotesView> {
             case ConnectionState.done:
             return StreamBuilder(stream: _notesService.allNotes,builder: (context,snapshot){
               switch (snapshot.connectionState){
+                case ConnectionState.active:
                 case ConnectionState.waiting:
-                  return const Text('Waiting For All Notes Wait For A Seconds....');
+                  return const Text('Waiting For All Notes Wait For A Second....');
                 default:
                   return const CircularProgressIndicator();
             } } ) ;
