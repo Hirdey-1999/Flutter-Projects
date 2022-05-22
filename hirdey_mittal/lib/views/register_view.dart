@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/constants/routes.dart';
 import 'package:hirdey_mittal/service/auth/auth_exceptions.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
-import 'package:hirdey_mittal/utilities/show_error_dialog.dart';
+import 'package:hirdey_mittal/utilities/dialogs/error_dialog.dart';
 import '../firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
@@ -68,7 +68,7 @@ class _RegisterViewState extends State<RegisterView> {
                   TextButton(onPressed: () async {
                     final email = _email.text;
                     final password  = _password.text;
-                    showAlertDialog(context, 'Check Your Email For Verification');
+                    // showAlertDialog(context, 'Check Your Email For Verification');
                     try{
                     final usercredential = await AuthService.firebase().createUser(email: email, password: password);
                     devtools.log(usercredential.toString());

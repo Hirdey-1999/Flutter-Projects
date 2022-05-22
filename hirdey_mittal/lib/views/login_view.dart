@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/constants/routes.dart';
 import 'package:hirdey_mittal/service/auth/auth_exceptions.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
-import '../utilities/show_error_dialog.dart';
+import 'package:hirdey_mittal/utilities/dialogs/error_dialog.dart';
 import 'register_view.dart';
 import '../firebase_options.dart';
 import 'dart:developer' as devtools show log; 
@@ -82,8 +82,8 @@ class _LoginViewState extends State<LoginView> {
                   Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false);  
                   }
                   else{
-                    // User Is Not Verified
-                  await showAlertDialog(context, "Check Your Email Or Register Again");
+                  // User Is Not Verified
+                  await showErrorDialog(context, "Check Your Email Or Register Again");
                   Navigator.of(context).pushNamedAndRemoveUntil(registerRoute ,(route) => false);
                   }
                   

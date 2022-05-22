@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
 import 'package:hirdey_mittal/service/crud/notes_service.dart';
+import 'package:hirdey_mittal/utilities/dialogs/logout-dialog.dart';
+import 'package:hirdey_mittal/views/notes/notes_list_view.dart';
 
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
@@ -25,7 +27,7 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notes', textScaleFactor: 1.8,),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.transparent,
         actions: [
           IconButton(onPressed: () {Navigator.of(context).pushNamed(newNoteRoute);} , icon: const Icon(Icons.add)),
           //LogOut
@@ -47,16 +49,11 @@ class _NotesViewState extends State<NotesView> {
                 case ConnectionState.waiting:
                   if(snapshot.hasData){
                     final allNotes = snapshot.data as List<DatabaseNotes>;
+                    return notesListView(notes: allNotes, onDeleteNote: (note) async {
+                      await _notesService.deleteNote(id: note.id);
+                    });
                     print(allNotes);
-                    return ListView.builder(
-                      itemCount: allNotes.length,
-                      itemBuilder: (context, index){
-                        final note = allNotes[index];
-                        return ListTile(
-                          title: Text(note.text, maxLines: 1,softWrap: true,overflow: TextOverflow.ellipsis,),
-                        );
-                      }
-                    );
+                    
                   }else{
                     return const CircularProgressIndicator();
                   }
@@ -71,24 +68,4 @@ class _NotesViewState extends State<NotesView> {
 
     );
   }
-}
-
-Future<bool> showLogOutDialog(BuildContext context){
-  return showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Log Out'),
-        content: const Text('Are You Sure You Want To Log Out?'),
-        actions: [
-          TextButton(onPressed: () {
-            Navigator.of(context).pop(false);
-          }, child: const Text('Cancel')),
-          TextButton(onPressed: () {
-            Navigator.of(context).pop(true);
-          }, child: const Text('Log Out'),),
-        ],
-      );
-  },
-  ).then((value) => value ?? false);
 }
