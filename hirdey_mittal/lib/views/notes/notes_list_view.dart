@@ -3,12 +3,13 @@ import 'package:hirdey_mittal/service/crud/notes_service.dart';
 import 'package:hirdey_mittal/utilities/dialogs/delete_dialog.dart';
 
 
-typedef DeleteNoteCallBack = void Function(DatabaseNotes note);
+typedef NoteCallBack = void Function(DatabaseNotes note);
 
 class notesListView extends StatelessWidget {
   final List<DatabaseNotes> notes;
-  final DeleteNoteCallBack onDeleteNote;
-  const notesListView({Key? key, required this.notes, required this.onDeleteNote}) : super(key: key);
+  final NoteCallBack onDeleteNote;
+  final NoteCallBack onTap;
+  const notesListView({Key? key, required this.notes, required this.onDeleteNote, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,9 @@ class notesListView extends StatelessWidget {
       itemBuilder: (context, index){
         final note = notes[index];
         return ListTile(
+          onTap: (){
+            onTap(note);
+          },
           title: Text(note.text, maxLines: 1,softWrap: true,overflow: TextOverflow.ellipsis,),
           trailing: IconButton(onPressed: () async {
             final shouldDelete = await showDeleteDialog(context);

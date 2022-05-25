@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
 import 'package:hirdey_mittal/service/crud/notes_service.dart';
 import 'package:hirdey_mittal/utilities/dialogs/logout-dialog.dart';
+import 'package:hirdey_mittal/views/notes/create-update-notes-view.dart';
 import 'package:hirdey_mittal/views/notes/notes_list_view.dart';
 
 import '../../constants/routes.dart';
@@ -29,7 +30,7 @@ class _NotesViewState extends State<NotesView> {
         title: const Text('Notes', textScaleFactor: 1.8,),
         backgroundColor: Colors.transparent,
         actions: [
-          IconButton(onPressed: () {Navigator.of(context).pushNamed(newNoteRoute);} , icon: const Icon(Icons.add)),
+          IconButton(onPressed: () {Navigator.of(context).pushNamed(createOrUpdateNotesRoutes);} , icon: const Icon(Icons.add)),
           //LogOut
           IconButton(onPressed: () async{ final shouldLogout = await showLogOutDialog(context);
             if (shouldLogout){
@@ -51,7 +52,9 @@ class _NotesViewState extends State<NotesView> {
                     final allNotes = snapshot.data as List<DatabaseNotes>;
                     return notesListView(notes: allNotes, onDeleteNote: (note) async {
                       await _notesService.deleteNote(id: note.id);
-                    });
+                    }, onTap: (note) { 
+                      Navigator.of(context).pushNamed(createOrUpdateNotesRoutes, arguments: note,);
+                     },); 
                     print(allNotes);
                     
                   }else{
