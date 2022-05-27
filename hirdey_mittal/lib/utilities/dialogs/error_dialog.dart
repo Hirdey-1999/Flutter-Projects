@@ -9,3 +9,11 @@ Future<void> showErrorDialog(
 ){
   return showGenericDialog<void>(context: context, title: 'An Error Occured', content: text , optionsBuilder: () => {'OK' : null,});
 }
+
+Future<void> showAlertDialog(
+  BuildContext context,
+  String text,
+
+){
+  return showGenericDialog<void>(context: context, title: 'Check Your Email', content: text , optionsBuilder: () => {'OK' : null,});
+}

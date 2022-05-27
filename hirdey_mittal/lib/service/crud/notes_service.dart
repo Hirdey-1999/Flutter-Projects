@@ -2,7 +2,8 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:hirdey_mittal/extensions/list/filter.dart';
 import 'package:hirdey_mittal/service/crud/crud_crudexceptions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,6 +14,8 @@ class noteService {
   Database? _db;
 
 List<DatabaseNotes> _notes = [];
+
+DatabaseUser? _user;
 
 static final noteService _shared = noteService._sharedInstance();
 noteService._sharedInstance(){
@@ -26,14 +29,28 @@ factory noteService() => _shared;
 
 late final StreamController<List<DatabaseNotes>> _notesStreamController ;
 
-Stream <List<DatabaseNotes>> get allNotes => _notesStreamController.stream;
+Stream <List<DatabaseNotes>> get allNotes => _notesStreamController.stream.filter((note) {
+  final currentUser = _user;
+  if(currentUser!=null){
+    return note.userId == currentUser.id;
+  }
+  else{
+    throw userShouldbeSetBeforeReadingAllnotes();
+  }
+});
 
-Future<DatabaseUser>getOrCreateUser({required String email}) async {
+Future<DatabaseUser>getOrCreateUser({required String email, bool setAsCurrentUser = true}) async {
   try{
     final user = await getUser(email: email);
+    if(setAsCurrentUser) {
+    _user= user; 
+    }
     return user;
   } on CouldNotFindUser {
     final createdUser = await createUser(email: email);
+    if(setAsCurrentUser) {
+    _user = createdUser;
+    }
     return createdUser;
   } catch (e) {
     rethrow; 
@@ -55,7 +72,7 @@ Future<void> _cacheNotes() async {
     final updatesCount = await db.update(noteTable, {
       textColumn: text,
       isSyncedWithCloudColumn: 0,
-    });
+    }, where: 'id = ?' , whereArgs: [note.id]);
 
     if(updatesCount == 0){
       throw CouldNotUpdateNotes();

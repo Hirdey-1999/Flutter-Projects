@@ -68,7 +68,7 @@ class _RegisterViewState extends State<RegisterView> {
                   TextButton(onPressed: () async {
                     final email = _email.text;
                     final password  = _password.text;
-                    // showAlertDialog(context, 'Check Your Email For Verification');
+                    showAlertDialog(context, 'Check Your Email For Verification');
                     try{
                     final usercredential = await AuthService.firebase().createUser(email: email, password: password);
                     devtools.log(usercredential.toString());
