@@ -2,10 +2,12 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
+import 'package:hirdey_mittal/utilities/dialogs/canot_share_empty_note_dialog.dart';
 import 'package:hirdey_mittal/utilities/generics/get_argument.dart';
 import 'package:hirdey_mittal/service/cloud/cloud_note.dart';
 import 'package:hirdey_mittal/service/cloud/cloud_storage_exceptions.dart';
 import 'package:hirdey_mittal/service/cloud/firebase_cloud_storage.dart';
+import 'package:share_plus/share_plus.dart';
 
 class createUpdateNoteView extends StatefulWidget {
   const createUpdateNoteView({Key? key}) : super(key: key);
@@ -91,7 +93,18 @@ class _createUpdateNoteViewState extends State<createUpdateNoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('New Notes View')),
+      appBar: AppBar(
+        title: const Text('New Notes View'),
+        actions: [IconButton(onPressed: (() async {
+          final text =  _textcontroller.text;
+          if(_notes == null || text.isEmpty) {
+            await showCannotShareEmptyNoteDialog(context);
+          }
+          else {
+            Share.share(text);
+          }
+        }), icon: const Icon(Icons.share))],
+      ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
         builder: (context, snapshot) {
