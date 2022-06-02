@@ -43,6 +43,12 @@ class _LoginViewState extends State<LoginView> {
         padding: const EdgeInsets.all(0.0),
         child: Column(
           children: [
+            Image.asset(
+              'images/login.jpg',
+              width: 300,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
             Title(
                 color: Colors.black,
                 child: Text(
@@ -52,6 +58,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   textScaleFactor: 1.5,
                 )),
+                
             Padding(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               child: TextField(
@@ -82,12 +89,7 @@ class _LoginViewState extends State<LoginView> {
                     },
                   )),
             ),
-            Image.asset(
-              'images/login.jpg',
-              width: 300,
-              height: 300,
-              fit: BoxFit.cover,
-            ),
+            
             TextButton(
               onPressed: () async {
                 final email = _email.text;
