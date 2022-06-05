@@ -44,7 +44,13 @@ dependencies:
   share_plus: ^4.0.5
   speech_to_text: ^5.5.0
   highlight_text: ^1.4.0
-  avatar_glow: ^2.0.2
+  image_picker: ^0.8.4+4
+  pdf: ^3.6.3
+  document_scanner_flutter: ^0.2.5
+  printing: ^5.6.3
+  url_launcher: ^6.0.16
+  intl: ^0.17.0
+  opencv_4: ^1.0.0
 
 dev_dependencies:
   flutter_test:

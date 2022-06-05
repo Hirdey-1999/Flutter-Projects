@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
 import 'package:hirdey_mittal/service/cloud/cloud_note.dart';
 import 'package:hirdey_mittal/service/crud/notes_service.dart';
@@ -58,6 +60,23 @@ class _NotesViewState extends State<NotesView> {
             ),
           ],
         ),
+        drawer: Drawer(
+            child: ListView(
+          children: [
+            ListTile(
+              title: const Text('Notes'),
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(notesRoute, (route) => false);
+              },
+            ),
+            ListTile(
+              title: const Text('DocScan'),
+              onTap: () {
+                Navigator.of(context).pushNamed(createOrUpdateNotesRoutes);
+              },),
+          ],
+        )),
         body: StreamBuilder(
             stream: _notesService.allNotes(ownerUserID: userId),
             builder: (context, snapshot) {
@@ -67,7 +86,7 @@ class _NotesViewState extends State<NotesView> {
                   if (snapshot.hasData) {
                     final allNotes = snapshot.data as Iterable<CloudNote>;
                     return notesListView(
-                      notes:allNotes  ,
+                      notes: allNotes,
                       onDeleteNote: (note) async {
                         await _notesService.deleteNote(
                             documentID: note.documentID);
