@@ -6,6 +6,7 @@ import 'package:hirdey_mittal/service/auth/auth_service.dart';
 import 'package:hirdey_mittal/service/cloud/cloud_note.dart';
 import 'package:hirdey_mittal/service/crud/notes_service.dart';
 import 'package:hirdey_mittal/utilities/dialogs/logout-dialog.dart';
+import 'package:hirdey_mittal/views/docScan/docScanView.dart';
 import 'package:hirdey_mittal/views/notes/create-update-notes-view.dart';
 import 'package:hirdey_mittal/views/notes/notes_list_view.dart';
 import '../../constants/routes.dart';
@@ -73,7 +74,7 @@ class _NotesViewState extends State<NotesView> {
             ListTile(
               title: const Text('DocScan'),
               onTap: () {
-                Navigator.of(context).pushNamed(createOrUpdateNotesRoutes);
+                Navigator.of(context).pushNamed(docScanRoutes);
               },),
           ],
         )),

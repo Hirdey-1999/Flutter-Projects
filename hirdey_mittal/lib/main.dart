@@ -2,8 +2,10 @@ import 'dart:developer' as devtools show log;
 import 'package:hirdey_mittal/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
+import 'package:hirdey_mittal/views/docScan/docScanView.dart';
 import 'package:hirdey_mittal/views/notes/create-update-notes-view.dart';
 import 'package:hirdey_mittal/views/notes/notes_view.dart';
+import 'package:path/path.dart';
 import 'firebase_options.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';
@@ -23,6 +25,7 @@ void main() {
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
         createOrUpdateNotesRoutes: (context) => const createUpdateNoteView(),
+        docScanRoutes: (context) => const docScanView(),
       },
     ),
   );
