@@ -74,7 +74,7 @@ class _NotesViewState extends State<NotesView> {
             ListTile(
               title: const Text('DocScan'),
               onTap: () {
-                Navigator.of(context).pushNamed(docScanRoutes);
+                Navigator.of(context).pushNamedAndRemoveUntil(docScanRoutes, (route) => false);
               },),
           ],
         )),
