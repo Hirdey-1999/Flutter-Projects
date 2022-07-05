@@ -4,62 +4,53 @@ import 'package:intl/intl.dart';
 
 class transactionList extends StatelessWidget {
   final List<Transaction> Transactions;
-
-  transactionList(this.Transactions);
+  final txdelete;
+  transactionList(this.Transactions, this.txdelete);
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: MediaQuery.of(context).size.height * 0.60,
       child: Transactions.isEmpty
-          ? 
-          Column(children: [
-              Text('No Transactions Added Yet !!', style: TextStyle(fontSize: 30),),
-              SizedBox(height: 30,),
-              Container(height: 100 ,child: Image.asset('assets/images/waiting.png', fit: BoxFit.cover)),
-            ])
+          ? LayoutBuilder(builder: ((ctx, constraints) {
+              return Column(children: [
+                Text(
+                  'No Transactions Added Yet !!',
+                  style: TextStyle(fontSize: 30),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                    height: constraints.maxHeight * 0.6,
+                    child: Image.asset('assets/images/waiting.png',
+                        fit: BoxFit.cover)),
+              ]);
+            }))
           : ListView.builder(
               itemBuilder: (ctx, index) {
                 return Card(
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                          color: Theme.of(context).primaryColorDark,
-                          width: 1.5,
-                        )),
-                        child: Text(
-                          '₹: ' + Transactions[index].amount.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                            color: Theme.of(context).primaryColor,
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 3),
+                  elevation: 3,
+                  child: ListTile(
+                    leading: FittedBox(
+                        child: CircleAvatar(
+                      radius: 40,
+                      child: Text(Transactions[index].amount.toString()),
+                    )),
+                    title: Text(Transactions[index].title),
+                    subtitle: Text(
+                        DateFormat.yMMMd().format(Transactions[index].date)),
+                    trailing: MediaQuery.of(context).size.width > 460
+                        ? TextButton.icon(
+                            onPressed: () => txdelete(Transactions[index].id),
+                            icon: Icon(Icons.delete,),
+                            label: Text('Delete'))
+                        : IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => txdelete(Transactions[index].id),
+                            color: Colors.red,
                           ),
-                        ),
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.all(10),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            Transactions[index].title,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Text(
-                            DateFormat.yMMMd().format(
-                              Transactions[index].date,
-                            ),
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      )
-                    ],
                   ),
-                  elevation: 10,
                 );
               },
               itemCount: Transactions.length,

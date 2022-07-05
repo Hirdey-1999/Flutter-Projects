@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class newTransaction extends StatefulWidget {
   final addTx;
@@ -12,75 +13,112 @@ class newTransaction extends StatefulWidget {
 class _newTransactionState extends State<newTransaction> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
 
   void submitData() {
     final enteredTitle = titleController.text;
     final enteredAmount = double.parse(amountController.text);
+    final date = selectedDate;
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || date == null) {
       return;
     }
 
     widget.addTx(
       enteredTitle,
       enteredAmount,
+      date,
     );
 
     Navigator.of(context).pop;
   }
 
+  void presentDate() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1962),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      } setState(() {
+        selectedDate = pickedDate;
+      });
+        
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Add Your New Transaction',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                    textAlign: TextAlign.center,
-                  ),
-                  IconButton(
-                      onPressed: Navigator.of(context).pop,
-                      icon: Icon(
-                        Icons.close,
-                        size: 30,
-                      )),
-                ],
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(top: 10, right: 10, left: 10,bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Add Your New Transaction',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.center,
+                    ),
+                    IconButton(
+                        onPressed: Navigator.of(context).pop,
+                        icon: Icon(
+                          Icons.close,
+                          size: 30,
+                        )),
+                  ],
+                ),
               ),
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: 'Title'),
-              controller: titleController,
-              keyboardType: TextInputType.text,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.singleLineFormatter,
-              ],
-              onSubmitted: (_) => submitData(),
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: 'Amount'),
-              controller: amountController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-            ),
-            TextButton(
-                onPressed: () => widget.addTx(
-                    titleController.text, double.parse(amountController.text)),
-                child: Text(
-                  'Add Transaction',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                  ),
-                )),
-          ],
+              TextField(
+                decoration: InputDecoration(labelText: 'Title'),
+                controller: titleController,
+                keyboardType: TextInputType.text,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.singleLineFormatter,
+                ],
+                onSubmitted: (_) => submitData(),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Amount'),
+                controller: amountController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+              ),
+              Container(
+                height: 70,
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(selectedDate == null
+                        ? 'No Date Chosen!'
+                        : 'Picked Date Is:  ${DateFormat.yMMMd().format(selectedDate)}'),
+                    IconButton(
+                      onPressed: presentDate,
+                      icon: Icon(Icons.calendar_month), 
+                      color: Theme.of(context).primaryColor,
+                    )
+                  ],
+                ),
+              ),
+              TextButton(
+                  onPressed: () => widget.addTx(
+                      titleController.text, double.parse(amountController.text), selectedDate),
+                  child: Text(
+                    'Add Transaction',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  )),
+            ],
+          ),
         ),
       ),
     );
