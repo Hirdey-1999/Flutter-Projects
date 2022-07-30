@@ -18,8 +18,8 @@ void main() {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      darkTheme: ThemeData.dark(),
       home: const HomePage(),
+      debugShowCheckedModeBanner: false,
       routes: {
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),

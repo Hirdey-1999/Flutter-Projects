@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -42,11 +43,10 @@ class _newTransactionState extends State<newTransaction> {
     ).then((pickedDate) {
       if (pickedDate == null) {
         return;
-      } setState(() {
+      }
+      setState(() {
         selectedDate = pickedDate;
       });
-        
-      
     });
   }
 
@@ -56,7 +56,11 @@ class _newTransactionState extends State<newTransaction> {
       child: Card(
         elevation: 5,
         child: Container(
-          padding: EdgeInsets.only(top: 10, right: 10, left: 10,bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+          padding: EdgeInsets.only(
+              top: 10,
+              right: 10,
+              left: 10,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
@@ -65,22 +69,23 @@ class _newTransactionState extends State<newTransaction> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                   const  Text(
                       'Add Your New Transaction',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                       textAlign: TextAlign.center,
                     ),
                     IconButton(
                         onPressed: Navigator.of(context).pop,
-                        icon: Icon(
-                          Icons.close,
-                          size: 30,
+                        icon: const Icon(
+                          CupertinoIcons.clear,
+                          size: 28,
                         )),
                   ],
                 ),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 controller: titleController,
                 keyboardType: TextInputType.text,
                 inputFormatters: <TextInputFormatter>[
@@ -95,28 +100,30 @@ class _newTransactionState extends State<newTransaction> {
               ),
               Container(
                 height: 70,
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(selectedDate == null
+                     Text(selectedDate == null
                         ? 'No Date Chosen!'
                         : 'Picked Date Is:  ${DateFormat.yMMMd().format(selectedDate)}'),
                     IconButton(
                       onPressed: presentDate,
-                      icon: Icon(Icons.calendar_month), 
+                      icon: Icon(CupertinoIcons.calendar),
                       color: Theme.of(context).primaryColor,
                     )
                   ],
                 ),
               ),
-              TextButton(
-                  onPressed: () => widget.addTx(
-                      titleController.text, double.parse(amountController.text), selectedDate),
-                  child: Text(
-                    'Add Transaction',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )),
+              SizedBox(
+                height: 50,
+                width: 500,
+                child: CupertinoButton(
+                  child: const Text('Add Transaction',style: TextStyle(fontSize: 20),),
+                  color: Colors.teal,
+                  onPressed: () => widget.addTx(titleController.text,
+                      double.parse(amountController.text), selectedDate),
+                ),
+              ),
             ],
           ),
         ),
