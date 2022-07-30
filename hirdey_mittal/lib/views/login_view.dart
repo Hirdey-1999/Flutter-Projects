@@ -15,9 +15,9 @@ class LoginView extends StatefulWidget {
   @override
   State<LoginView> createState() => _LoginViewState();
 }
-  late final TextEditingController _email;
-class _LoginViewState extends State<LoginView> {
   
+class _LoginViewState extends State<LoginView> {
+  late final TextEditingController _email;
   late final TextEditingController _password;
   bool _isObscure = true;
 

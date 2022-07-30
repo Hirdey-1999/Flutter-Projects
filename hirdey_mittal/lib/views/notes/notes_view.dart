@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hirdey_mittal/service/auth/auth_service.dart';
 import 'package:hirdey_mittal/service/cloud/cloud_note.dart';
 import 'package:hirdey_mittal/service/crud/notes_service.dart';
@@ -31,38 +30,40 @@ class _NotesViewState extends State<NotesView> {
     _notesService = FirebaseCloudStorage();
     super.initState();
   }
-
+  void dispose() {
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text(
-        //     'Notes',
-        //     textScaleFactor: 1.8,
-        //   ),
-        //   backgroundColor: Colors.blue,
-        //   actions: [
-        //     IconButton(
-        //         onPressed: () {
-        //           Navigator.of(context).pushNamed(createOrUpdateNotesRoutes);
-        //         },
-        //         icon: const Icon(Icons.add)),
-        //     //LogOut
-        //     IconButton(
-        //       onPressed: () async {
-        //         final shouldLogout = await showLogOutDialog(context);
-        //         if (shouldLogout) {
-        //           await AuthService.firebase().logOut();
-        //           Navigator.of(context)
-        //               .pushNamedAndRemoveUntil(loginRoute, (_) => false);
-        //         }
-        //       },
-        //       icon: Icon(
-        //         Icons.logout,
-        //       ),
-        //     ),
-        //   ],
-        // ),
+        appBar: AppBar(
+          title: const Text(
+            'Notes',
+            textScaleFactor: 1.8,
+          ),
+          backgroundColor: Colors.blue,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(createOrUpdateNotesRoutes);
+                },
+                icon: const Icon(Icons.add)),
+            //LogOut
+            IconButton(
+              onPressed: () async {
+                final shouldLogout = await showLogOutDialog(context);
+                if (shouldLogout) {
+                  await AuthService.firebase().logOut();
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(loginRoute, (_) => false);
+                }
+              },
+              icon: Icon(
+                Icons.logout,
+              ),
+            ),
+          ],
+        ),
         drawer: Drawer(
             child: Container(color: Colors.white,
               child: ListView(
@@ -94,46 +95,34 @@ class _NotesViewState extends State<NotesView> {
                       ],
                     ),
             )),
-        body: CustomScrollView(
-          slivers: [SliverAppBar(
-            pinned: true,
-            snap: true,
-            floating: true,
-            expandedHeight: 150,
-            flexibleSpace:  FlexibleSpaceBar(
-              title: Text('Notes'),
-              background: SvgPicture.asset('assests/chat/paper-clip.svg'),
-            ),
-          ),
-          StreamBuilder(
-              stream: _notesService.allNotes(ownerUserID: userId),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.active:
-                  case ConnectionState.waiting:
-                    if (snapshot.hasData) {
-                      final allNotes = snapshot.data as Iterable<CloudNote>;
-                      return notesListView(
-                        notes: allNotes,
-                        onDeleteNote: (note) async {
-                          await _notesService.deleteNote(
-                              documentID: note.documentID);
-                        },
-                        onTap: (note) {
-                          Navigator.of(context).pushNamed(
-                            createOrUpdateNotesRoutes,
-                            arguments: note,
-                          );
-                        },
-                      );
-                      print(allNotes);
-                    } else {
-                      return const CircularProgressIndicator();
-                    }
-                  default:
+        body: StreamBuilder(
+            stream: _notesService.allNotes(ownerUserID: userId),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.active:
+                case ConnectionState.waiting:
+                  if (snapshot.hasData) {
+                    final allNotes = snapshot.data as Iterable<CloudNote>;
+                    return notesListView(
+                      notes: allNotes,
+                      onDeleteNote: (note) async {
+                        await _notesService.deleteNote(
+                            documentID: note.documentID);
+                      },
+                      onTap: (note) {
+                        Navigator.of(context).pushNamed(
+                          createOrUpdateNotesRoutes,
+                          arguments: note,
+                        );
+                      },
+                    );
+                    print(allNotes);
+                  } else {
                     return const CircularProgressIndicator();
-                }
-              }),
-        ]));
+                  }
+                default:
+                  return const CircularProgressIndicator();
+              }
+            }));
   }
 }
