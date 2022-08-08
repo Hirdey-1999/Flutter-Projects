@@ -21,7 +21,6 @@ void main() {
       ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
-      
       routes: {
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
@@ -34,34 +33,34 @@ void main() {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({ Key? key }) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
- @override
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: AuthService.firebase().initialise(),
+        future: AuthService.firebase().initialise(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-            final user = AuthService.firebase().currentUser;
-            if (user!= null){
-              if(user.isEmailVerified) {
-                devtools.log('Hello World');
-                Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (Route<dynamic> route) => false);
-                return const NotesView();
+              final user = AuthService.firebase().currentUser;
+              if (user != null) {
+                if (user.isEmailVerified) {
+                  devtools.log('Hello World');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      notesRoute, (Route<dynamic> route) => false);
+                  return const NotesView();
+                } else {
+                  return const RegisterView();
+                }
+              } else {
+                return const LoginView();
               }
-              else{
-                return const RegisterView();
-              }
-            } else {
-              return const LoginView();
-            }
 
-        default:
-        return const CircularProgressIndicator();}
-
-        }
-      );
+            default:
+              return const CircularProgressIndicator();
+          }
+        });
   }
 }
+
 enum MenuAction { logout }

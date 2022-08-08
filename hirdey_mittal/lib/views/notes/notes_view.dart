@@ -30,24 +30,50 @@ class _NotesViewState extends State<NotesView> {
     _notesService = FirebaseCloudStorage();
     super.initState();
   }
+
   void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Notes',
-            textScaleFactor: 1.8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(50),
+              bottomRight: Radius.circular(100),
+            ),
           ),
+          bottom: PreferredSize(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: Text('What is Your Today\'s Notes ?',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 23,
+                              fontWeight: FontWeight.w300,
+                            )),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              preferredSize: Size.fromHeight(100)),
           backgroundColor: Colors.blue,
           actions: [
             IconButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed(createOrUpdateNotesRoutes);
                 },
-                icon: const Icon(Icons.add)),
+                icon: const Icon(Icons.add,color: Colors.white,)),
             //LogOut
             IconButton(
               onPressed: () async {
@@ -59,24 +85,30 @@ class _NotesViewState extends State<NotesView> {
                 }
               },
               icon: Icon(
-                Icons.logout,
+                Icons.logout,color: Colors.white
               ),
             ),
           ],
         ),
         drawer: Drawer(
-            child: Container(color: Colors.white,
-              child: ListView(
-                      children: [
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(500),side: BorderSide.none),
+            child: Container(
+          color: Colors.white,
+          child: ListView(
+            children: [
               Container(
                 height: 60,
                 child: ListTile(
                     leading: Card(
-                      child: Icon(Icons.person,size: 40),
+                      child: Icon(Icons.person, size: 40),
                       elevation: 5,
                     ),
-                    title: Text('Hey!, ' + emailId,style: TextStyle(color: Colors.white),)),
-                    color: Colors.blue,
+                    title: Text(
+                      'Hey!, ' + emailId,
+                      style: TextStyle(color: Colors.white),
+                    )),
+                color: Colors.blue,
               ),
               ListTile(
                 title: const Text('Notes'),
@@ -92,9 +124,9 @@ class _NotesViewState extends State<NotesView> {
                       .pushNamedAndRemoveUntil(docScanRoutes, (route) => false);
                 },
               ),
-                      ],
-                    ),
-            )),
+            ],
+          ),
+        )),
         body: StreamBuilder(
             stream: _notesService.allNotes(ownerUserID: userId),
             builder: (context, snapshot) {

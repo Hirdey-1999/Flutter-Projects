@@ -92,7 +92,7 @@ class notesListView extends StatelessWidget {
                 Container(
                   height: 155,
                   decoration: BoxDecoration(
-                      color: Color.fromRGBO(231, 221, 219,90),
+                      color: Color.fromRGBO(249, 255, 146,100),
                       borderRadius: BorderRadius.only(
                         bottomLeft:  Radius.circular(20),
                         bottomRight: Radius.circular(20),

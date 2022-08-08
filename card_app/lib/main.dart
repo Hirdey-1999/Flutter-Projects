@@ -35,23 +35,8 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('data')),
-      body: Container(
-        height: 100,
-        width: 100,
-        child: Column(
-          children: [
-            Container(
-              height: 50,
-              color: Colors.green,
-            ),
-            Container(
-              color: Colors.red,
-              height: 100,
-            )
-          ],
-        ),
-      ),
+      backgroundColor:Color(0xFF21BFBD),
+      
     );
   }
 }

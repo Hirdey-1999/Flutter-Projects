@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:hirdey_mittal/constants/routes.dart';
+import 'package:hirdey_mittal/service/auth/auth_service.dart';
+import 'package:hirdey_mittal/utilities/dialogs/logout-dialog.dart';
 import 'package:hirdey_mittal/views/docScan/docScan_Screens/FirstScreen.dart';
 import 'package:hirdey_mittal/views/docScan/docScan_Screens/SecondScreen.dart';
+
 class docScanView extends StatefulWidget {
   const docScanView({Key? key}) : super(key: key);
 
@@ -29,26 +31,63 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Document Scanner'),
-            bottom: const TabBar(
-              tabs: [
-                Tab(text: "Original \n Image"),
-                Tab(
-                  text: "Scan\nImage",
-                ),
-              ],
+    String emailId = AuthService.firebase().currentUser!.email;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Document Scanner'),
+        backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final shouldLogout = await showLogOutDialog(context);
+              if (shouldLogout) {
+                await AuthService.firebase().logOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(loginRoute, (_) => false);
+              }
+            },
+            icon: Icon(
+              Icons.logout,
             ),
           ),
-          body: TabBarView(
-            children: [
-              Firstpage(),
-              Secondpage(),
-            ],
-          ),
-        ));
+        ],
+      ),
+      drawer: Drawer(
+          child: Container(
+        color: Colors.white,
+        child: ListView(
+          children: [
+            Container(
+              height: 60,
+              child: ListTile(
+                  leading: Card(
+                    child: Icon(Icons.person, size: 40),
+                    elevation: 5,
+                  ),
+                  title: Text(
+                    'Hey!, $emailId',
+                    style: TextStyle(color: Colors.white),
+                  )),
+              color: Colors.blue,
+            ),
+            ListTile(
+              title: const Text('Notes'),
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(notesRoute, (route) => false);
+              },
+            ),
+            ListTile(
+              title: const Text('DocScan'),
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(docScanRoutes, (route) => false);
+              },
+            ),
+          ],
+        ),
+      )),
+      body: Firstpage()
+    );
   }
 }
